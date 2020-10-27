@@ -26,8 +26,12 @@
     -->
     <title>SPAship</title>
     <script>
+      // surface local dev variables, if needed
+      "%REACT_APP_LOCALENV_API%" && (window.SPASHIP_LOCALENV_API = "%REACT_APP_LOCALENV_API%");
+      "%REACT_APP_LOCALENV_DOMAIN%" && (window.SPASHIP_LOCALENV_DOMAIN = "%REACT_APP_LOCALENV_DOMAIN%");
+
       (function () {
-        const head = document.getElementsByTagName("head")[0];
+        const head = document.head;
         const script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "%PUBLIC_URL%/config/manager.js?timestamp=" + new Date().getTime();
