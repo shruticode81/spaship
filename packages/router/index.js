@@ -1,3 +1,5 @@
+const https = require("https");
+const http = require("http");
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const fsp = require("fs").promises;
@@ -151,7 +153,21 @@ async function start() {
   // Start proxy server on port
   let app = express();
   app.use("/", pathProxy);
-  server = app.listen(config.get("port"));
+
+  if (config.get("cert") && config.get("key")) {
+    const key = fs.readFileSync(config.get("key"));
+    const cert = fs.readFileSync(config.get("cert"));
+    const options = {
+      key,
+      cert,
+    };
+
+    server = https.createServer(options, app);
+  } else {
+    server = http.createServer(app);
+  }
+
+  server.listen(config.get("port"));
 }
 
 /**
