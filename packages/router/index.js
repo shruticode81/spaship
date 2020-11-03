@@ -114,6 +114,7 @@ const customRouter = function (req) {
 let options = {
   target: config.get("target"), // target host
   changeOrigin: true,
+  secure: false,
   router: customRouter,
   logLevel: config.get("log_level"),
   logProvider: () => log,
