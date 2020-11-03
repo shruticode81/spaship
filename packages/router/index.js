@@ -113,7 +113,7 @@ const customRouter = function (req) {
 // proxy middleware options
 let options = {
   target: config.get("target"), // target host
-  changeOrigin: true,
+  changeOrigin: false,
   secure: false,
   router: customRouter,
   logLevel: config.get("log_level"),
