@@ -116,8 +116,8 @@ let options = {
   logProvider: () => log,
   autoRewrite: true,
   onProxyRes: (proxyRes, req) => {
-    req.headers["host"] = config.get("fallback");
     console.log(req.headers);
+    req.headers["host"] = config.get("fallback");
     if (proxyRes.statusCode >= 301 && proxyRes.statusCode <= 308 && proxyRes.headers["location"]) {
       // When the origin responds with a redirect it's location contains the flat path.
       // This needs to be converted back to the url path. The original conversion is stored
