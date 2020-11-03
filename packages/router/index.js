@@ -115,7 +115,7 @@ let options = {
   logLevel: config.get("log_level"),
   logProvider: () => log,
   autoRewrite: true,
-  hostRewrite: config.get("target"),
+  hostRewrite: config.get("fallback"),
   onProxyRes: (proxyRes, req) => {
     if (proxyRes.statusCode >= 301 && proxyRes.statusCode <= 308 && proxyRes.headers["location"]) {
       // When the origin responds with a redirect it's location contains the flat path.
