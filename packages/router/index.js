@@ -1,8 +1,9 @@
 const https = require("https");
 const http = require("http");
+const fs = require("fs");
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const fsp = require("fs").promises;
+const fsp = fs.promises;
 const { flatpath } = require("@spaship/common");
 const { log } = require("@spaship/common/lib/logging/pino");
 const config = require("./config");
