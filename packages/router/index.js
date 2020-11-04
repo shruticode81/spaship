@@ -116,8 +116,16 @@ let options = {
   logProvider: () => log,
   autoRewrite: true,
   onProxyRes: (proxyRes, req) => {
-    console.log("2. Headers");
-    console.log(req.headers);
+    const fallback = config.get("fallback");
+    if (fallback) {
+      try {
+        const fallbackUrl = new URL(fallback);
+        req.headers["x-forwarded-host"] = fallbackUrl.host;
+      } catch (error) {
+        log.error("Fallback is not a valid url");
+      }
+    }
+
     if (proxyRes.statusCode >= 301 && proxyRes.statusCode <= 308 && proxyRes.headers["location"]) {
       // When the origin responds with a redirect it's location contains the flat path.
       // This needs to be converted back to the url path. The original conversion is stored
