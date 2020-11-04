@@ -116,11 +116,13 @@ let options = {
   logProvider: () => log,
   autoRewrite: true,
   onProxyRes: (proxyRes, req) => {
+    console.log("2. Headers");
+    console.log(req.headers);
     const fallback = config.get("fallback");
     if (fallback) {
       try {
         const fallbackUrl = new URL(fallback);
-        req.headers["x-forwarded-host"] = fallbackUrl.host;
+        req.headers["host"] = fallbackUrl.host;
       } catch (error) {
         log.error("Fallback is not a valid url");
       }
@@ -162,7 +164,7 @@ async function start() {
   let app = express();
   app.use((req, res, next) => {
     console.log("1. Headers");
-    console.log(res.headers);
+    console.log(req.headers);
     return pathProxy(req, res, next);
   });
   server = app.listen(config.get("port"));
