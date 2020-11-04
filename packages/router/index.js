@@ -116,6 +116,7 @@ let options = {
   logProvider: () => log,
   autoRewrite: true,
   onProxyRes: (proxyRes, req) => {
+    console.log("2. Headers");
     console.log(req.headers);
     if (proxyRes.statusCode >= 301 && proxyRes.statusCode <= 308 && proxyRes.headers["location"]) {
       // When the origin responds with a redirect it's location contains the flat path.
@@ -151,7 +152,11 @@ async function start() {
 
   // Start proxy server on port
   let app = express();
-  app.use("/", pathProxy);
+  app.use((req, res, next) => {
+    console.log("1. Headers");
+    console.log(res.headers);
+    return pathProxy(req, res, next);
+  });
   server = app.listen(config.get("port"));
 }
 
