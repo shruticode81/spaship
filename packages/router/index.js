@@ -128,7 +128,7 @@ let options = {
         location = location.replace(flatPath, urpPath);
       }
 
-      proxyRes.headers["location"] = location;
+      // proxyRes.headers["location"] = location;
     }
   },
 };
