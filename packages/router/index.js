@@ -29,6 +29,8 @@ async function updateDirCache() {
 }
 
 const customRouter = function (req) {
+  console.log(req);
+  console.log(req.headers);
   let url = req.url.replace(/\/+/g, "/"); // Avoid duplicate slash issue
   let routeUrl; // This is the final path that the router will route the request to
   let regExMatch; // Regular expression match object for finding SPA paths in the url
@@ -83,7 +85,7 @@ const customRouter = function (req) {
 
   if (matchFound) {
     // Proxy to spaship flattened url path
-    req.url = routeUrl;
+    // req.url = routeUrl;
     req.headers["x-spaship-flat-path"] = matchedFlatDir;
     req.headers["x-spaship-url-path"] = spaPath;
     routeHost = config.get("target");
