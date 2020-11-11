@@ -151,7 +151,7 @@ async function start() {
 
   // Start proxy server on port
   let app = express();
-  app.use("/", pathProxy);
+  app.use(pathProxy);
   server = app.listen(config.get("port"));
 }
 
