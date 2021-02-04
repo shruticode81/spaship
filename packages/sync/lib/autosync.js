@@ -18,6 +18,8 @@ class Autosync {
     } else {
       this.targets = [];
     }
+
+    log.error(this.targets);
     this.intervalHandles = [];
   }
 
