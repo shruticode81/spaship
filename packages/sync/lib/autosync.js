@@ -108,10 +108,12 @@ class Autosync {
     let response;
 
     try {
-      log.info("[Autosync] Getting target url:", url);
+      log.info("[Autosync] Getting target url:" + url);
       response = await axios.get(url);
     } catch (error) {
-      log.error("[Autosync] Error fetching remote target:", url, error);
+      log.error("[Autosync] Error fetching remote target:" + url, error);
+      log.error(error);
+      console.error(error);
       return;
     }
 
