@@ -88,11 +88,12 @@ class Autosync {
     let url = target.source.url;
     let destPath = target.dest.path;
     let file = path.join(destPath, target.dest.filename);
-
+    log.info(url);
     // If there are sub-paths defined get them
     if (target.source.sub_paths) {
       for (let subPath of target.source.sub_paths) {
-        url = urljoin(target.source.url, subPath);
+        url = target.source.url + subPath;
+        log.error(url);
         destPath = path.join(target.dest.path, subPath);
         file = path.join(destPath, target.dest.filename);
 
