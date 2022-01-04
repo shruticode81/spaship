@@ -2,7 +2,8 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const archiver = require("archiver");
-const readPackageUpAsync = require("read-pkg-up").readPackageUpAsync;
+const readPkgUp = require("read-pkg-up");
+const { v4: uuidv4 } = require("uuid");
 
 /**
  * Compress the directory contents of `directoryPath` and creates a zip archive in the os temp dir
@@ -10,27 +11,33 @@ const readPackageUpAsync = require("read-pkg-up").readPackageUpAsync;
  * @param {string} rawSpashipYml - Contents of the spaship.yml file
  * @returns {Promise<string>} - Promise with the path of zip file created
  */
-function zipDirectory(directoryPath, rawSpashipYml) {
+function zipDirectory(directoryPath) {
   const tempDir = os.tmpdir();
   try {
     fs.mkdirSync(tempDir); // If temp dir doesn't exist create it
   } catch (e) {
     // Do nothing
   }
-  try {
-    fs.writeFileSync(path.join(directoryPath, "spaship.yaml"), rawSpashipYml); // Write spaship.yaml if not found
-  } catch (e) {
-    // Do nothing
-  }
-  const pkgData = readPackageUpAsync();
-  const pkgName =
-    pkgData && pkgData.packageJson && pkgData.packageJson["name"] ? pkgData.packageJson["name"] : "SPAShipArchive";
-  const pkgVersion =
+  
+  const pkgData = readPkgUp.sync();
+
+  let zipPath;
+  if(pkgData == undefined){
+    //means to nearest package.json present
+    const uuid = uuidv4();
+    zipPath = path.join(tempDir, 'SPAship'+uuid+".zip");
+    // console.log(zipPath);
+    return zipUtil(directoryPath,zipPath)
+  }else{
+    const pkgName =
+    pkgData && pkgData.packageJson && pkgData.packageJson["name"] ? pkgData.packageJson["name"] : "SPAshipArchive";
+    const pkgVersion =
     pkgData && pkgData.packageJson && pkgData.packageJson["version"] ? pkgData.packageJson["version"] : "";
-  // create an absolute path to the zip file.  replace any '/' with '_' in the pkgName (forward slashes are used in
-  // organization-scoped npm package names, such as: @spaship/cli
-  const zipPath = path.join(tempDir, `${pkgName.replace(/\//g, "_")}${pkgVersion ? "-" + pkgVersion : ""}.zip`);
-  return zipUtil(directoryPath, zipPath);
+    // create an absolute path to the zip file.  replace any '/' with '_' in the pkgName (forward slashes are used in
+    // organization-scoped npm package names, such as: @spaship/cli
+    zipPath = path.join(tempDir, `${pkgName.replace(/\//g, "_")}${pkgVersion ? "-" + pkgVersion : ""}.zip`);
+    return zipUtil(directoryPath, zipPath);
+  }
 }
 
 /**

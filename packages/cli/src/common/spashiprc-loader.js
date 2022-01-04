@@ -3,7 +3,7 @@ const path = require("path");
 const { defaultsDeep } = require("lodash");
 
 // You can also search and load synchronously.
-const explorerSync = cosmiconfigSync("spaship", {
+const explorerSync = cosmiconfigSync("spashipsession", {
   transform: (result) => {
     // search for a secondary spashiprc file, and merge the objects.  this allows a kind of "layering" of spashiprc
     // properties, which is especially useful when you want spashiprc `envs` to be tracked in version control but not
