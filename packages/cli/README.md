@@ -21,11 +21,11 @@ A command line interface for SPAship.
 <!-- usage -->
 
 ```sh-session
-$ npm install -g @spaship/cli
+$ npm install -g spashiptest
 $ spaship COMMAND
 running command...
 $ spaship (-v|--version|version)
-@spaship/cli/0.13.2 linux-x64 node-v12.18.3
+spashiptest/1.0.0
 $ spaship --help [COMMAND]
 USAGE
   $ spaship COMMAND
@@ -41,6 +41,9 @@ USAGE
 - [`spaship deploy [ARCHIVE]`](#spaship-deploy-archive)
 - [`spaship help [COMMAND]`](#spaship-help-command)
 - [`spaship init`](#spaship-init)
+- [`spaship login`](#spaship-login)
+- [`spaship pack`](#spaship-pack)
+- [`spaship upload`](#spaship-upload)
 
 ## `spaship deploy [ARCHIVE]`
 
@@ -56,15 +59,16 @@ ARGUMENTS
 
 OPTIONS
   -b, --builddir=builddir  path of your SPAs artifact. Defaults to 'buildDir' if specified in the spaship.yaml.
-  -e, --env=env    [default: default] either the name of a SPAship environment as defined in your .spashiprc.yml file,
-                   or a URL to a SPAship environment
 
-  -p, --path=path  a custom URL path for your app under the SPAship domain. Defaults to the 'path' in your spaship.yaml.
-                   ex: /my/app
+  -e, --env=env            [default: default] either the name of a SPAship environment as defined in your .spashiprc.yml
+                           file, or a URL to a SPAship environment
 
-  -r, --ref=ref    [default: undefined] a version tag, commit hash, or branch to identify this release
+  -p, --path=path          a custom URL path for your app under the SPAship domain. Defaults to the 'path' in your
+                           spaship.yaml. ex: /my/app
 
-  --apikey=apikey  a SPAship API key
+  -r, --ref=ref            [default: undefined] a version tag, commit hash, or branch to identify this release
+
+  --apikey=apikey          a SPAship API key
 
 DESCRIPTION
   Send an archive containing a SPA to a SPAship host for deployment.  Supports .tar.gz/.tgz, .zip, and .tar.bz2.
@@ -74,7 +78,7 @@ EXAMPLES
   $ spaship deploy # deploying a buildDir directory
 ```
 
-_See code: [src/commands/deploy.js](https://github.com/spaship/spaship/blob/v0.13.2/src/commands/deploy.js)_
+_See code: [src/commands/deploy.js](https://github.com/shruticode81/spaship/blob/v1.0.0/src/commands/deploy.js)_
 
 ## `spaship help [COMMAND]`
 
@@ -91,7 +95,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.3.1/src/commands/help.ts)_
 
 ## `spaship init`
 
@@ -102,17 +106,78 @@ USAGE
   $ spaship init
 
 OPTIONS
-  -n, --name=name    (required) a human-friendly title for your app
-  -p, --path=path    (required) the URL path for your app under the SPAship domain. ex: /my/app
-  -s, --[no-]single  route all non-asset requests to index.html
-  --overwrite        overwrite existing spaship.yaml
+  -b, --builddir=builddir  path of your SPAs artifact. Defaults to 'buildDir' if specified in the spaship.yaml.
+  -d, --dist=dist          the URL path for dist folder
+  -m, --file=file          the URL path for .spaship file
 
 DESCRIPTION
-  Without arguments, init will ask you a few questions and generate a spaship.yaml config file.  The answers can also be
-  passed in as CLI options.
+  Without arguments, init will ask you a few questions and generate a .spaship config file.
+
+EXAMPLES
+  $ spaship init --file=/home/shranand/Documents/one-platform/packages/home-spa
+  --dist=/home/shranand/Documents/one-platform/packages/home-spa/dist
+  $ spaship init --builddir=build
 ```
 
-_See code: [src/commands/init.js](https://github.com/spaship/spaship/blob/v0.13.2/src/commands/init.js)_
+_See code: [src/commands/init.js](https://github.com/shruticode81/spaship/blob/v1.0.0/src/commands/init.js)_
+
+## `spaship login`
+
+Authenticate and Authorize users inorder to deploy SPA
+
+```
+USAGE
+  $ spaship login
+
+OPTIONS
+  -s, --server=server  orchestrator-base-url it is responsible for loading file from cli
+  -t, --token=token    jwt token for authentication
+
+DESCRIPTION
+  user access token && server url is saved inside config file(.spashipsessionrc.yaml) .
+  spaship login command can be copied from web-ui.
+
+EXAMPLES
+  $ spaship login --token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiS
+  --server=http://dev.api.apps.int.spoke.preprod.us-west-2.aws.paas.redhat.com
+  Here server refer to api Base-URL && token refer to jwt access token for authorization
+```
+
+_See code: [src/commands/login.js](https://github.com/shruticode81/spaship/blob/v1.0.0/src/commands/login.js)_
+
+## `spaship pack`
+
+pack the distribution folder
+
+```
+USAGE
+  $ spaship pack
+
+DESCRIPTION
+  create and save the zip file of distribution folder which is consist of SPA content inside tmp.
+
+EXAMPLE
+  $ spaship pack
+```
+
+_See code: [src/commands/pack.js](https://github.com/shruticode81/spaship/blob/v1.0.0/src/commands/pack.js)_
+
+## `spaship upload`
+
+deploy to a SPAship host
+
+```
+USAGE
+  $ spaship upload
+
+DESCRIPTION
+  Send zip file containing a SPA to a SPAship host for deployment.
+
+EXAMPLE
+  $ spaship upload
+```
+
+_See code: [src/commands/upload.js](https://github.com/shruticode81/spaship/blob/v1.0.0/src/commands/upload.js)_
 
 <!-- commandsstop -->
 

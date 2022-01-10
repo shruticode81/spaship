@@ -6,25 +6,26 @@ const chalk = require("chalk");
 const { loadRcFile } = require("./spashiprc-loader");
 
 async function session(filepath) {
-  const yamlContent = loadRcFile();
+  let yamlContent = loadRcFile();
   const HomeDir = os.homedir();
   let data;
   let yamlString;
   if (yamlContent.file) {
     if (yamlContent.dist) {
-      const { token, server, dist } = yamlContent;
+      let { token, server, dist } = yamlContent;
+      // console.log(yamlContent);
       data = {
         token: token,
         server: server,
         file: filepath,
         dist: dist,
       };
-
+      // console.log(data);
       yamlString = yaml.dump(data);
       fs.writeFileSync(path.join(HomeDir, ".spashipsessionrc.yaml"), yamlString, "utf8");
       console.log(chalk.bold.greenBright("spaship path is successfully overwritten & saved in session"));
     } else {
-      const { token, server } = yamlContent;
+      let { token, server } = yamlContent;
       data = {
         token: token,
         server: server,
