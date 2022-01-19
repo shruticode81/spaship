@@ -236,11 +236,46 @@ class InitCommand extends Command {
             //save the dist path into the session
             await distSession(flags.dist);
           }
-        }
-        if (data || newData) {
-          const { validate } = valid(newData);
-          if (validate || !data.overwrite) {
-            //check if distribution folder is present or not in current dir.
+        } else {
+          //if user haven't provided dist in flag
+          //check if .spaship file is generated or not if not don't save dist
+          //if overwritten is false then save the dist
+          if (newData) {
+            const { validate } = valid(newData);
+            // console.log(validate);
+            if (validate) {
+              //check if distribution folder is present or not in current dir.
+              try {
+                if (fs.existsSync("./dist")) {
+                  console.log("Dist Directory exists :", path.resolve("dist"));
+                  await distSession(path.resolve("dist"));
+                } else if (fs.existsSync("./build")) {
+                  console.log("Directory build exists :", path.resolve("build"));
+                  await distSession(path.resolve("build"));
+                } else if (fs.existsSync(`./${flags.builddir}`)) {
+                  console.log(`./${flags.builddir} exists`);
+                  await distSession(path.join(process.cwd(), `./${flags.builddir}`));
+                } else {
+                  //Distribution file doesn't exist - prompt user to enter the dist path
+                  this.log(chalk.bold.cyanBright("Please input distribution folder path"));
+                  do {
+                    var promptDist = await inquirer.prompt([
+                      {
+                        name: "DistPath",
+                        type: "input",
+                        message: "Please enter the correct dist path",
+                      },
+                    ]);
+                  } while (await dirEmpty(promptDist.DistPath));
+
+                  //save the dist path input in session file
+                  await distSession(promptDist.DistPath);
+                }
+              } catch (e) {
+                this.error("An error occurred! dist path is missing");
+              }
+            }
+          } else if (!data.overwrite) {
             try {
               if (fs.existsSync("./dist")) {
                 console.log("Dist Directory exists :", path.resolve("dist"));

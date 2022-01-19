@@ -22,7 +22,7 @@ $ npm install -g spashiptest
 $ spaship COMMAND
 running command...
 $ spaship (-v|--version|version)
-spashiptest/1.1.1 linux-x64 node-v14.18.3
+spashiptest/1.1.2 linux-x64 node-v14.18.3
 $ spaship --help [COMMAND]
 USAGE
   $ spaship COMMAND
@@ -78,7 +78,7 @@ EXAMPLES
   $ spaship init --builddir=build
 ```
 
-_See code: [src/commands/init.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/init.js)_
+_See code: [src/commands/init.js](https://github.com/shruticode81/spaship/blob/v1.1.2/src/commands/init.js)_
 
 ## `spaship login`
 
@@ -102,7 +102,7 @@ EXAMPLES
   Here server refer to api Base-URL && token refer to jwt access token for authorization
 ```
 
-_See code: [src/commands/login.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/login.js)_
+_See code: [src/commands/login.js](https://github.com/shruticode81/spaship/blob/v1.1.2/src/commands/login.js)_
 
 ## `spaship pack`
 
@@ -119,7 +119,7 @@ EXAMPLE
   $ spaship pack
 ```
 
-_See code: [src/commands/pack.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/pack.js)_
+_See code: [src/commands/pack.js](https://github.com/shruticode81/spaship/blob/v1.1.2/src/commands/pack.js)_
 
 ## `spaship upload [ZIP]`
 
@@ -141,7 +141,7 @@ EXAMPLES
   If no your-app-1.0.0.zip is provided it will zip and upload it.
 ```
 
-_See code: [src/commands/upload.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/upload.js)_
+_See code: [src/commands/upload.js](https://github.com/shruticode81/spaship/blob/v1.1.2/src/commands/upload.js)_
 <!-- commandsstop -->
 
 <!-- # spashiprc & SPAship environments
