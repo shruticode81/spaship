@@ -8,17 +8,15 @@ A command line interface for SPAship.
 [![License](https://img.shields.io/npm/l/@spaship/cli.svg)](https://github.com/spaship/cli/blob/master/package.json)
 
 <!-- toc -->
-
-- [SPAship CLI](#spaship-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-- [Writing tests](#writing-tests)
+* [SPAship CLI](#spaship-cli)
+* [Usage](#usage)
+* [Commands](#commands)
+* [Writing tests](#writing-tests)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g spashiptest
 $ spaship COMMAND
@@ -30,53 +28,16 @@ USAGE
   $ spaship COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`spaship help [COMMAND]`](#spaship-help-command)
-- [`spaship init`](#spaship-init)
-- [`spaship login`](#spaship-login)
-- [`spaship pack`](#spaship-pack)
-- [`spaship upload [ZIP]`](#spaship-upload-zip)
-
-<!-- ## `spaship deploy [ARCHIVE]`
-
-deploy to a SPAship host
-
-```
-USAGE
-  $ spaship deploy [ARCHIVE]
-
-ARGUMENTS
-  ARCHIVE  An archive (zip, tarball, or bzip2) file containing SPA static assets and a spaship.yaml file. You can omit
-           this if you specify the build artifact path as `buildDir` in the spaship.yaml file.
-
-OPTIONS
-  -b, --builddir=builddir  path of your SPAs artifact. Defaults to 'buildDir' if specified in the spaship.yaml.
-
-  -e, --env=env            [default: default] either the name of a SPAship environment as defined in your .spashiprc.yml
-                           file, or a URL to a SPAship environment
-
-  -p, --path=path          a custom URL path for your app under the SPAship domain. Defaults to the 'path' in your
-                           spaship.yaml. ex: /my/app
-
-  -r, --ref=ref            [default: undefined] a version tag, commit hash, or branch to identify this release
-
-  --apikey=apikey          a SPAship API key
-
-DESCRIPTION
-  Send an archive containing a SPA to a SPAship host for deployment.  Supports .tar.gz/.tgz, .zip, and .tar.bz2.
-
-EXAMPLES
-  $ npm pack && spaship deploy your-app-1.0.0.tgz # deploying an archive created with npm pack
-  $ spaship deploy # deploying a buildDir directory
-```
-
-_See code: [src/commands/deploy.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/deploy.js)_ -->
+* [`spaship help [COMMAND]`](#spaship-help-command)
+* [`spaship init`](#spaship-init)
+* [`spaship login`](#spaship-login)
+* [`spaship pack`](#spaship-pack)
+* [`spaship upload [ZIP]`](#spaship-upload-zip)
 
 ## `spaship help [COMMAND]`
 
@@ -112,7 +73,7 @@ DESCRIPTION
   Without arguments, init will ask you a few questions and generate a .spaship config file.
 
 EXAMPLES
-  $ spaship init --file=/home/shranand/Documents/one-platform/packages/home-spa
+  $ spaship init --file=/home/shranand/Documents/one-platform/packages/home-spa 
   --dist=/home/shranand/Documents/one-platform/packages/home-spa/dist
   $ spaship init --builddir=build
 ```
@@ -136,7 +97,7 @@ DESCRIPTION
   spaship login command can be copied from web-ui.
 
 EXAMPLES
-  $ spaship login --token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiS
+  $ spaship login --token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiS 
   --server=http://dev.api.apps.int.spoke.preprod.us-west-2.aws.paas.redhat.com
   Here server refer to api Base-URL && token refer to jwt access token for authorization
 ```
@@ -181,7 +142,6 @@ EXAMPLES
 ```
 
 _See code: [src/commands/upload.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/upload.js)_
-
 <!-- commandsstop -->
 
 <!-- # spashiprc & SPAship environments

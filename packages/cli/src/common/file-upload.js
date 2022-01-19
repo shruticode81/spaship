@@ -18,8 +18,7 @@ async function fileUpload(archive, webProperty) {
       {
         Authorization: "Bearer " + config.token,
       },
-      formData.getHeaders(),
-    
+      formData.getHeaders()
     );
     let options = {
       method: "POST",
@@ -34,7 +33,7 @@ async function fileUpload(archive, webProperty) {
       // console.log(response);
       return response.data;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       console.log(chalk.bold.redBright("Error type : Request failed with status code 503"));
       throw new Error(chalk.bold.redBright("Please Check the Status of API pod !"));
     }

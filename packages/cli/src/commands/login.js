@@ -69,7 +69,7 @@ class LoginCommand extends Command {
       result = res.data;
       token = result.data.token;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       this.log(chalk.bold.redBright("Error type : 401 Authentication"));
     }
 
