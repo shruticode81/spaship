@@ -24,8 +24,8 @@ $ npm install -g spashiptest
 $ spaship COMMAND
 running command...
 $ spaship (-v|--version|version)
-spashiptest/1.1.0 linux-x64 node-v14.18.2
-$ spaship help [COMMAND]
+spashiptest/1.1.1 linux-x64 node-v14.18.3
+$ spaship --help [COMMAND]
 USAGE
   $ spaship COMMAND
 ...
@@ -36,13 +36,12 @@ USAGE
 # Commands
 
 <!-- commands -->
-<!-- * [`spaship deploy [ARCHIVE]`](#spaship-deploy-archive) -->
 
 - [`spaship help [COMMAND]`](#spaship-help-command)
 - [`spaship init`](#spaship-init)
 - [`spaship login`](#spaship-login)
 - [`spaship pack`](#spaship-pack)
-- [`spaship upload`](#spaship-upload)
+- [`spaship upload [ZIP]`](#spaship-upload-zip)
 
 <!-- ## `spaship deploy [ARCHIVE]`
 
@@ -77,7 +76,7 @@ EXAMPLES
   $ spaship deploy # deploying a buildDir directory
 ```
 
-_See code: [src/commands/deploy.js](https://github.com/shruticode81/spaship/blob/v1.1.0/src/commands/deploy.js)_ -->
+_See code: [src/commands/deploy.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/deploy.js)_ -->
 
 ## `spaship help [COMMAND]`
 
@@ -96,32 +95,6 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.3.1/src/commands/help.ts)_
 
-## `spaship login`
-
-Authenticate and Authorize users inorder to deploy SPA
-
-```
-USAGE
-  $ spaship login
-
-OPTIONS
-  -s, --server=server  orchestrator-base-url it is responsible for uploading file from cli
-  -t, --token=token    jwt token for authentication
-
-DESCRIPTION
-  user access token && server url is saved inside session file(.spashipsessionrc.yaml) .
-  spaship login command can be copied from web-ui.
-
-EXAMPLES
-  $ spaship login --token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiS
-  --server=http://dev.api.apps.int.spoke.preprod.us-west-2.aws.paas.redhat.com
-  Here server refer to api Base-URL && token refer to jwt access token for authorization
-  $ spaship login
-  It will prompt for token and server value
-```
-
-_See code: [src/commands/login.js](https://github.com/shruticode81/spaship/blob/v1.1.0/src/commands/login.js)_
-
 ## `spaship init`
 
 Initialize a SPAship config file for your app.
@@ -136,7 +109,7 @@ OPTIONS
   -m, --file=file          the URL path for .spaship file
 
 DESCRIPTION
-  Without arguments, init will ask you a few questions and generate a .spaship config file and save the path of .spaship inside session file
+  Without arguments, init will ask you a few questions and generate a .spaship config file.
 
 EXAMPLES
   $ spaship init --file=/home/shranand/Documents/one-platform/packages/home-spa
@@ -144,7 +117,31 @@ EXAMPLES
   $ spaship init --builddir=build
 ```
 
-_See code: [src/commands/init.js](https://github.com/shruticode81/spaship/blob/v1.1.0/src/commands/init.js)_
+_See code: [src/commands/init.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/init.js)_
+
+## `spaship login`
+
+Authenticate and Authorize users inorder to deploy SPA
+
+```
+USAGE
+  $ spaship login
+
+OPTIONS
+  -s, --server=server  orchestrator-base-url it is responsible for loading file from cli
+  -t, --token=token    jwt token for authentication
+
+DESCRIPTION
+  user access token && server url is saved inside config file(.spashipsessionrc.yaml) .
+  spaship login command can be copied from web-ui.
+
+EXAMPLES
+  $ spaship login --token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiS
+  --server=http://dev.api.apps.int.spoke.preprod.us-west-2.aws.paas.redhat.com
+  Here server refer to api Base-URL && token refer to jwt access token for authorization
+```
+
+_See code: [src/commands/login.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/login.js)_
 
 ## `spaship pack`
 
@@ -161,26 +158,29 @@ EXAMPLE
   $ spaship pack
 ```
 
-_See code: [src/commands/pack.js](https://github.com/shruticode81/spaship/blob/v1.1.0/src/commands/pack.js)_
+_See code: [src/commands/pack.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/pack.js)_
 
-## `spaship upload`
+## `spaship upload [ZIP]`
 
 deploy to a SPAship host
 
 ```
 USAGE
-  $ spaship upload
+  $ spaship upload [ZIP]
+
+ARGUMENTS
+  ZIP  An archive (zip) file containing SPA static assets and a .spaship configfile.
 
 DESCRIPTION
-Send zip file containing a SPA to a SPAship host for deployment.
+  Send zip file containing a SPA to a SPAship host for deployment.
 
-EXAMPLE
+EXAMPLES
   $ spaship upload your-app-1.0.0.zip #here your-app-1.0.0.zip refer to zip created by pack command
   $spaship upload # will prompt to enter your-app-1.0.0.zip
   If no your-app-1.0.0.zip is provided it will zip and upload it.
 ```
 
-_See code: [src/commands/upload.js](https://github.com/shruticode81/spaship/blob/v1.1.0/src/commands/upload.js)_
+_See code: [src/commands/upload.js](https://github.com/shruticode81/spaship/blob/v1.1.1/src/commands/upload.js)_
 
 <!-- commandsstop -->
 
