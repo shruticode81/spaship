@@ -1,7 +1,7 @@
 {
   "name": "spashiptest",
   "description": "A command line interface for SPAship!",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "shrutianand",
   "bin": {
     "spaship": "./bin/run"
@@ -36,13 +36,14 @@
     "cosmiconfig": "^7.0.0",
     "form-data": "^4.0.0",
     "inquirer": "^8.0.0",
-    "inquirer-recursive": "^0.0.7",
+    "inquirer-loop": "^0.3.0",
     "js-yaml": "^4.1.0",
     "jwt-check-expiration": "^1.0.5",
     "lodash": "^4.17.15",
     "nconf": "^0.11.0",
     "ora": "^5.0.0",
     "pretty-bytes": "^5.3.0",
+    "read-package-json": "^4.1.1",
     "read-pkg-up": "^7.0.0",
     "uuid": "^8.3.2"
   },

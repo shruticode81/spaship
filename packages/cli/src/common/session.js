@@ -43,7 +43,7 @@ async function session(filepath) {
     yamlString = yaml.dump(data);
     //   fs.writeFileSync(path.join(userHomeDir, ".spashipsessionrc.yaml"), yamlStr, "utf8");
     fs.appendFileSync(path.join(HomeDir, ".spashipsessionrc.yaml"), yamlString, "utf8");
-    console.log(chalk.bold.redBright("spaship path is successfully saved in session"));
+    console.log(chalk.bold.magentaBright("spaship path is successfully saved in session"));
   }
 }
 module.exports = session;

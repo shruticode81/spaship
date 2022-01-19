@@ -5,10 +5,18 @@ const valid = require("./valid");
 
 async function write(filename, data) {
   //validate the JSON data - calling valid func
-
   const { validate } = valid(data);
   if (!validate) {
-    console.log(chalk.bold(`WARNING: configuration is invalid,`) + chalk.redBright.bold(`Environment field is empty`));
+    // if (data.websiteName.length === 0 || data.name.length === 0 || data.mapping === 0) {
+    //   console.log(
+    //     chalk.bold(".spaship file configuration is invalid,") + chalk.redBright.bold(` All fields are Mandatory.`)
+    //   );
+    // }
+    console.log(
+      chalk.bold(".spaship file configuration is invalid, ") + chalk.redBright.bold(`NOTE: All fields are Mandatory.`)
+    );
+    // log.warn(`WARNING: configuration is invalid, `, data);
+
     return "invalid";
   } else {
     var stringify = JSON.stringify(data);

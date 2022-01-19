@@ -33,9 +33,14 @@ class LoginCommand extends Command {
             message: "Please enter token",
           },
           {
+            type: "list",
             name: "server",
-            type: "input",
-            message: "Please enter API base-url",
+            message: "Please select API base-url",
+            choices: [
+              "http://dev.api.apps.int.spoke.preprod.us-west-2.aws.paas.redhat.com",
+              "https://qa.api.apps.int.spoke.preprod.us-west-2.aws.paas.redhat.com",
+              "https://stage.api.apps.int.spoke.preprod.us-east-1.aws.paas.redhat.com",
+            ],
           },
         ]);
       } while (TokenPrompts.token.replace(/\s/g, "") === "" || TokenPrompts.server.replace(/\s/g, "") === "");
@@ -57,12 +62,14 @@ class LoginCommand extends Command {
         url: url,
         headers: {
           Authorization: AuthStr,
+          rejectUnauthorized: false,
         },
       });
       this.log(chalk.bold.magentaBright("Token", res.data.message));
       result = res.data;
       token = result.data.token;
     } catch (err) {
+      console.log(err);
       this.log(chalk.bold.redBright("Error type : 401 Authentication"));
     }
 
@@ -97,11 +104,11 @@ class LoginCommand extends Command {
           // console.log("dataOverwrite ", dataOverwrite);
           let yamlData = yaml.dump(dataOverwrite);
           fs.writeFileSync(path.join(userHomeDir, ".spashipsessionrc.yaml"), yamlData, "utf8");
-          this.log(chalk.bold(".spashipsessionrc.yaml file got overwritten !!"));
+          this.log(chalk.bold(".spashipsessionrc.yaml file got overwritten !"));
         }
       }
     } else {
-      this.error(chalk.bold.redBright("Token is invalid , Try generation new one !!"));
+      this.error(chalk.bold.redBright("Token has been expired or revoked !"));
     }
   }
 }

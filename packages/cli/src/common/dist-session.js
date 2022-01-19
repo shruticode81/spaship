@@ -37,7 +37,7 @@ async function distSession(filepath) {
     };
     yamlString = yaml.dump(data);
     fs.appendFileSync(path.join(HomeDir, ".spashipsessionrc.yaml"), yamlString, "utf8");
-    console.log(chalk.bold.redBright("Dist path is successfully saved in session"));
+    console.log(chalk.bold.magentaBright("Dist path is successfully saved in session"));
   }
 }
 module.exports = distSession;

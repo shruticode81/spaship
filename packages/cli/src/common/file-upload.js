@@ -18,7 +18,8 @@ async function fileUpload(archive, webProperty) {
       {
         Authorization: "Bearer " + config.token,
       },
-      formData.getHeaders()
+      formData.getHeaders(),
+    
     );
     let options = {
       method: "POST",
@@ -30,12 +31,15 @@ async function fileUpload(archive, webProperty) {
 
     try {
       const response = await axios(options);
+      // console.log(response);
       return response.data;
     } catch (err) {
-      this.log(chalk.bold.redBright("Error type : Request failed with status code 400"));
+      console.log(err);
+      console.log(chalk.bold.redBright("Error type : Request failed with status code 503"));
+      throw new Error(chalk.bold.redBright("Please Check the Status of API pod !"));
     }
   } else {
-    this.error(chalk.bold(" Try Running spaship login command with required token and server flags !!"));
+    this.error(chalk.bold("Run spaship login command with required token and server flags !"));
   }
 }
 module.exports = fileUpload;

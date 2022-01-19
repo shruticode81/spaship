@@ -24,13 +24,18 @@ class PackCommand extends Command {
             let rawdata = fs.readFileSync(path.resolve(configContent.file, ".spaship"));
             let spashipContent = JSON.parse(rawdata);
             await write(path.join(configContent.dist, ".spaship"), spashipContent);
-            this.log(chalk.bold.cyanBright(".spaship file is saved inside dist folder"));
+            this.log(
+              chalk.bold.cyanBright(".spaship at ") +
+                chalk.bold.yellowBright(configContent.file) +
+                chalk.bold.cyanBright(` is saved inside ${path.basename(configContent.dist)} at `) +
+                chalk.bold.yellowBright(configContent.dist)
+            );
 
             //zip the entire dist folder
             this.log(chalk.bold("Creating a zip archive in tmp folder..."));
             try {
               const archive = await zipDirectory(configContent.dist);
-              this.log(chalk.bold("Done creating the archive at location :"), chalk.bold.redBright(archive));
+              this.log(chalk.bold("Done creating the archive at location :"), chalk.bold.yellowBright(archive));
             } catch (e) {
               this.error(e);
             }
@@ -38,13 +43,13 @@ class PackCommand extends Command {
             this.log(chalk.yellow(".spaship file does'nt exist at : ") + chalk.bold(configContent.file));
           }
         } else {
-          this.error(chalk.bold("Please run spaship init with required file and dist input!!"));
+          this.error(chalk.bold("Please run spaship init with required file and dist input !"));
         }
       } else {
-        this.error(chalk.redBright.bold("Token got expired, Run login command!!"));
+        this.error(chalk.redBright.bold("Token got expired, Run login command !"));
       }
     } else {
-      this.error("Ran spaship login command , session file is missing !!");
+      this.error("Run spaship login command , session file is missing !");
     }
   }
 }

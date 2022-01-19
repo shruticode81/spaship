@@ -6,10 +6,11 @@ const { assign, omit } = require("lodash");
 const fs = require("fs");
 const chalk = require("chalk");
 const { loadRcFile } = require("../common/spashiprc-loader");
-const { isEmpty } = require("lodash");
+// const { isEmpty } = require("lodash");
 const write = require("../common/write");
 const exist = require("../common/exist");
 const session = require("../common/session");
+const valid = require("../common/valid");
 const dirEmpty = require("../common/empty");
 const distSession = require("../common/dist-session");
 const { isJwtExpired } = require("jwt-check-expiration");
@@ -25,7 +26,8 @@ class InitCommand extends Command {
       if (!isExpired) {
         //check if user have mention path of .spaship file - process user's command
         const { flags } = this.parse(InitCommand);
-
+        let newData;
+        let data;
         if (flags.file) {
           //check if .spaship file exists in the user's input path
           let existingConfigfile;
@@ -57,7 +59,11 @@ class InitCommand extends Command {
           let existingConfig;
           existingConfig = await exist(".spaship");
           if (!existingConfig) {
-            this.log(chalk.cyanBright("Please input required field and .spaship will be generated!"));
+            this.log(
+              chalk.cyanBright("Please provide inputs in all mandatory fields") +
+                chalk.redBright(" * ") +
+                chalk.cyanBright("and .spaship will be generated!")
+            );
           }
 
           // go into interactive questionaire mode
@@ -70,7 +76,9 @@ class InitCommand extends Command {
             var folder = process.cwd().split("/");
             return folder.splice(folder.length - 1, 1)[0];
           };
-          inquirer.registerPrompt("recursive", require("inquirer-recursive"));
+
+          inquirer.registerPrompt("loop", require("inquirer-loop")(inquirer));
+
           const questions = [
             {
               name: "websiteVersion",
@@ -79,59 +87,67 @@ class InitCommand extends Command {
               default: "1.0",
               filter: function (val) {
                 //Appending 'v' prefix to version no.
-                return "v" + val;
+                return ("v" + val).replace(/\s/g, "");
               },
               when: showQuestions,
             },
             {
               name: "websiteName",
-              message: "Website Name",
+              message: chalk.redBright("* ") + "Website Name",
               type: "input",
+              filter: function (value) {
+                return value.replace(/\s/g, "");
+              },
               when: showQuestions,
             },
             {
               name: "name",
-              message: "Name",
+              message: chalk.redBright("* ") + "Name",
               type: "input",
               default: res(),
+              filter: function (value) {
+                return value.replace(/\s/g, "");
+              },
               when: showQuestions,
             },
             {
               name: "mapping",
-              message: "Route",
+              message: chalk.redBright("* ") + "Route",
               type: "input",
               filter: function (value) {
-                return value
-                  .replace(/^\//, "") // Trim off leading /
-                  .replace(/_/g, "") // Convert normal path to flat path by replacing / with _
-                  .replace("/", "")
-                  .replace(" ", "");
+                return (
+                  value
+                    .replace(/^\//, "") // Trim off leading /
+                    .replace(/_/g, "")
+                    .replace(/\/$/, "") // Convert normal path to flat path by replacing / with _
+                    // .replace("/", "")
+                    .replace(/\s/g, "")
+                );
               },
-              disabled: "Mandatory Field",
               when: showQuestions,
             },
             {
-              type: "recursive",
-              message: "Add a new Environment?",
+              type: "loop",
+              message: "New Environment?",
               name: "environments",
               when: showQuestions,
-              prompts: [
+              questions: [
                 {
                   type: "input",
                   name: "name",
-                  message: "Environment Name",
+                  message: chalk.redBright("* ") + "Environment Name",
                   default: "prod",
                 },
                 {
                   type: "confirm",
                   name: "updateRestriction",
-                  message: "Do you want to restrict the update?",
+                  message: chalk.redBright("* ") + "Do you want to restrict the update?",
                   default: true,
                 },
                 {
                   type: "confirm",
                   name: "exclude",
-                  message: "Do you want to skip SPA deployment?",
+                  message: chalk.redBright("* ") + "Do you want to skip SPA deployment?",
                   default: false,
                 },
                 {
@@ -189,20 +205,19 @@ class InitCommand extends Command {
           // smush cli options, questionnaire answers, and anything extra into a data
           // object to pass into the template
 
-          const data = assign({}, responses);
+          data = assign({}, responses);
 
           if (!existingConfig || data.overwrite) {
             // if .spaship file doesn't exist create it
-            const newData = omit(data, "overwrite");
+            newData = omit(data, "overwrite");
             this.log(chalk.yellowBright.bold(".spaship content is :"));
             this.log(newData);
             const response = await write(".spaship", newData);
             if (response == "invalid") {
-              console.log(chalk.redBright.bold(`.spaship generation failed :( ,Please input environment !!`));
+              console.log(chalk.redBright.bold(`.spaship generation failed :-(`));
             } else {
               this.log(chalk.bold("Generated .spaship file !"));
               //save the .spaship path in session
-              // console.log(process.cwd());
               await session(process.cwd());
             }
           } else {
@@ -221,43 +236,47 @@ class InitCommand extends Command {
             //save the dist path into the session
             await distSession(flags.dist);
           }
-        } else {
-          //check if distribution folder is present or not in current dir.
-          try {
-            if (fs.existsSync("./dist")) {
-              console.log("Dist Directory exists :", path.resolve("dist"));
-              await distSession(path.resolve("dist"));
-            } else if (fs.existsSync("./build")) {
-              console.log("Directory build exists :", path.resolve("build"));
-              await distSession(path.resolve("build"));
-            } else if (fs.existsSync(`./${flags.builddir}`)) {
-              console.log(`./${flags.builddir} exists`);
-              await distSession(path.join(process.cwd(), `./${flags.builddir}`));
-            } else {
-              //Distribution file doesn't exist - prompt user to enter the dist path
-              this.log(chalk.cyanBright("Hey! It seem like you missed to input distribution folder path"));
-              do {
-                var promptDist = await inquirer.prompt([
-                  {
-                    name: "DistPath",
-                    type: "input",
-                    message: "Please enter the correct dist path",
-                  },
-                ]);
-              } while (await dirEmpty(promptDist.DistPath));
+        }
+        if (data || newData) {
+          const { validate } = valid(newData);
+          if (validate || !data.overwrite) {
+            //check if distribution folder is present or not in current dir.
+            try {
+              if (fs.existsSync("./dist")) {
+                console.log("Dist Directory exists :", path.resolve("dist"));
+                await distSession(path.resolve("dist"));
+              } else if (fs.existsSync("./build")) {
+                console.log("Directory build exists :", path.resolve("build"));
+                await distSession(path.resolve("build"));
+              } else if (fs.existsSync(`./${flags.builddir}`)) {
+                console.log(`./${flags.builddir} exists`);
+                await distSession(path.join(process.cwd(), `./${flags.builddir}`));
+              } else {
+                //Distribution file doesn't exist - prompt user to enter the dist path
+                this.log(chalk.bold.cyanBright("Please input distribution folder path"));
+                do {
+                  var promptDist = await inquirer.prompt([
+                    {
+                      name: "DistPath",
+                      type: "input",
+                      message: "Please enter the correct dist path",
+                    },
+                  ]);
+                } while (await dirEmpty(promptDist.DistPath));
 
-              //save the dist path input in session file
-              await distSession(promptDist.DistPath);
+                //save the dist path input in session file
+                await distSession(promptDist.DistPath);
+              }
+            } catch (e) {
+              this.error("An error occurred! dist path is missing");
             }
-          } catch (e) {
-            this.error("An error occurred! dist path is missing");
           }
         }
       } else {
-        this.error(chalk.redBright.bold("Token got expired, Run login command!!"));
+        this.error(chalk.redBright.bold("Token got expired, Run login command !"));
       }
     } else {
-      this.error("Ran spaship login command before spaship init !!");
+      this.error("Run spaship login command before spaship init !");
     }
   }
 }
