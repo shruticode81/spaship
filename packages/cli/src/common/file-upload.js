@@ -4,6 +4,8 @@ const fs = require("fs");
 const chalk = require("chalk");
 const { loadRcFile } = require("../common/spashiprc-loader");
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 async function fileUpload(archive, webProperty) {
   const config = loadRcFile();
   // console.log(config);
@@ -33,7 +35,7 @@ async function fileUpload(archive, webProperty) {
       // console.log(response);
       return response.data;
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       console.log(chalk.bold.redBright("Error type : Request failed with status code 503"));
       throw new Error(chalk.bold.redBright("Please Check the Status of API pod !"));
     }

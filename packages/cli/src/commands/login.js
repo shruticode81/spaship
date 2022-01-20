@@ -9,6 +9,8 @@ const os = require("os");
 const path = require("path");
 const chalk = require("chalk");
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 class LoginCommand extends Command {
   async run() {
     const { flags } = this.parse(LoginCommand);
@@ -62,7 +64,7 @@ class LoginCommand extends Command {
         url: url,
         headers: {
           Authorization: AuthStr,
-          rejectUnauthorized: false,
+          // rejectUnauthorized: false,
         },
       });
       this.log(chalk.bold.magentaBright("Token", res.data.message));
